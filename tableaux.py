@@ -44,7 +44,6 @@ def StringtoTree(A):
 
     # OJO: DEBE INCLUIR SU CÓDIGO DE STRING2TREE EN ESTA PARTE!!!!!
 
-    l = letrasProposicionales
     Conectivos = ['O', 'Y', '>', '=']
     Pila = []
     for c in A:
