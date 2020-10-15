@@ -28,7 +28,7 @@ def Inorder(f):
     # Imprime una formula como cadena dada una formula como arbol
     # Input: tree, que es una formula de logica proposicional
     # Output: string de la formula
-    if f.right == None:
+    if f.right is None:
         return f.label
     elif f.label == '-':
         return f.label + Inorder(f.right)
@@ -108,7 +108,7 @@ def es_literal(f):
     # Output: True/False
     if f.right is None:
         return True
-    elif f.label=='-':
+    elif f.label == '-':
         if f.right.right is None:
             return True
         else:
@@ -124,8 +124,8 @@ def no_literales(l):
     # Output: None/f, tal que f no es literal
     for i in range(len(l)):
         if not es_literal(l[i]):
-            return False
-    return True
+            return l[i]
+    return None
 
 
 def clasificacion(f):
@@ -170,49 +170,50 @@ def clasifica_y_extiende(f, h):
     print("Clasificada como:", clase)
     assert (clase is not None), "Formula incorrecta " + imprime_hoja(h)
 
-    if clase == 'ALFA1':
+    if clase == '1ALFA':
         aux = [x for x in h]
         listaHojas.remove(h)
         aux.remove(f)
         aux += [f.right.right]
         listaHojas.append(aux)
-    elif clase == 'ALFA2':
+    elif clase == '2ALFA':
         aux = [x for x in h]
         listaHojas.remove(h)
         aux.remove(f)
         aux += [f.left, f.right]
         listaHojas.append(aux)
-    elif clase == 'ALFA3':
+    elif clase == '3ALFA':
         aux = [x for x in h]
         listaHojas.remove(h)
         aux.remove(f)
         aux += [Tree('-', None, f.left), Tree('-', None, f.right)]
         listaHojas.append(aux)
-    elif clase == 'ALFA4':
+    elif clase == '4ALFA':
         aux = [x for x in h]
         listaHojas.remove(h)
         aux.remove(f)
         aux += [f.left, Tree('-', None, f.right)]
         listaHojas.append(aux)
-    elif clase == 'BETA1':
+    elif clase == '1BETA':
         aux = [x for x in h]
         listaHojas.remove(h)
         aux.remove(f)
         aux += [[Tree('-', None, f.left)], [Tree('-', None, f.right)]]
         listaHojas.append(aux)
-    elif clase == 'BETA2':
+    elif clase == '2BETA':
         aux = [x for x in h]
         listaHojas.remove(h)
         aux.remove(f)
         aux += [[f.left], [f.right]]
         listaHojas.append(aux)
-    elif clase == 'BETA3':
+    elif clase == '3BETA':
         aux = [x for x in h]
         listaHojas.remove(h)
         aux.remove(f)
         aux += [[Tree('-', None, f.left)], [f.right]]
         listaHojas.append(aux)
-        
+
+
 # Aqui el resto de casos
 
 
@@ -220,18 +221,27 @@ def Tableaux(f):
     # Algoritmo de creacion de tableau a partir de lista_hojas
     # Imput: - f, una fórmula como string en notación polaca inversa
     # Output: interpretaciones: lista de listas de literales que hacen
-    #		 verdadera a f
+    # verdadera a f
+
     global listaHojas
     global listaInterpsVerdaderas
 
     A = StringtoTree(f)
+    print(u'La fórmula introducida es:\n', Inorder(A))
+
     listaHojas = [[A]]
 
+    while len(listaHojas) > 0:
+        h = choice(listaHojas)
+        print("Trabajando con hoja:\n", imprime_hoja(h))
+        x = no_literales(h)
+        if x is None:
+            if par_complementario(h):
+                listaHojas.remove(h)
+            else:
+                listaInterpsVerdaderas.append(h)
+                listaHojas.remove(h)
+        else:
+            clasifica_y_extiende(x, h)
+
     return listaInterpsVerdaderas
-
-
-a = Tree('-', None, Tree('>', Tree('-', None, Tree('1', None, None)),
-                         Tree('Y', Tree('-', None, Tree('3', None, None)), Tree('2', None, None))))
-clasificacion(a)
-print(Inorder(Tree('-', None, Tree('>', Tree('-', None, Tree('1', None, None)),
-                                   Tree('Y', Tree('-', None, Tree('3', None, None)), Tree('2', None, None))))))
