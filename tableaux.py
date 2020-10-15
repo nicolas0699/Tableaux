@@ -170,16 +170,49 @@ def clasifica_y_extiende(f, h):
     print("Clasificada como:", clase)
     assert (clase is not None), "Formula incorrecta " + imprime_hoja(h)
 
-    if clase == 'Alfa1':
+    if clase == 'ALFA1':
         aux = [x for x in h]
         listaHojas.remove(h)
         aux.remove(f)
         aux += [f.right.right]
         listaHojas.append(aux)
-    elif clase == 'Alfa2':
-        pass
-
-
+    elif clase == 'ALFA2':
+        aux = [x for x in h]
+        listaHojas.remove(h)
+        aux.remove(f)
+        aux += [f.left, f.right]
+        listaHojas.append(aux)
+    elif clase == 'ALFA3':
+        aux = [x for x in h]
+        listaHojas.remove(h)
+        aux.remove(f)
+        aux += [Tree('-', None, f.left), Tree('-', None, f.right)]
+        listaHojas.append(aux)
+    elif clase == 'ALFA4':
+        aux = [x for x in h]
+        listaHojas.remove(h)
+        aux.remove(f)
+        aux += [f.left, Tree('-', None, f.right)]
+        listaHojas.append(aux)
+    elif clase == 'BETA1':
+        aux = [x for x in h]
+        listaHojas.remove(h)
+        aux.remove(f)
+        aux += [[Tree('-', None, f.left)], [Tree('-', None, f.right)]]
+        listaHojas.append(aux)
+    elif clase == 'BETA2':
+        aux = [x for x in h]
+        listaHojas.remove(h)
+        aux.remove(f)
+        aux += [[f.left], [f.right]]
+        listaHojas.append(aux)
+    elif clase == 'BETA3':
+        aux = [x for x in h]
+        listaHojas.remove(h)
+        aux.remove(f)
+        aux += [[Tree('-', None, f.left)], [f.right]]
+        listaHojas.append(aux)
+        
 # Aqui el resto de casos
 
 
