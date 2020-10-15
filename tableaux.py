@@ -111,8 +111,11 @@ def es_literal(f):
     # Output: True/False
     if f.right is None:
         return True
-    elif f.right.right is None:
-        return True
+    elif f.label=='-':
+        if f.right.right is None:
+            return True
+        else:
+            return False
     else:
         return False
 
@@ -122,7 +125,10 @@ def no_literales(l):
     # solo literales
     # Input: l, una lista de fórmulas como árboles
     # Output: None/f, tal que f no es literal
-    return False
+    for i in range(len(l)):
+        if not es_literal(l[i]):
+            return False
+    return True
 
 
 def clasificacion(f):
