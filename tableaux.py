@@ -43,6 +43,10 @@ def StringtoTree(A):
     # Output: formula como tree
 
     # OJO: DEBE INCLUIR SU CÓDIGO DE STRING2TREE EN ESTA PARTE!!!!!
+<<<<<<< HEAD
+=======
+
+>>>>>>> db36a23bdaa19c320e08683b65aaebfdbf1eb77c
     Conectivos = ['O', 'Y', '>', '=']
     Pila = []
     for c in A:
