@@ -43,8 +43,6 @@ def StringtoTree(A):
     # Output: formula como tree
 
     # OJO: DEBE INCLUIR SU CÓDIGO DE STRING2TREE EN ESTA PARTE!!!!!
-
-    l = letrasProposicionales
     Conectivos = ['O', 'Y', '>', '=']
     Pila = []
     for c in A:
@@ -80,11 +78,26 @@ def imprime_hoja(H):
     return cadena + "}"
 
 
+def complemento(a):
+    if a.label == '-':
+        print(Inorder(a.right))
+        return a.right
+    else:
+        print(Inorder(Tree('-', None, a)))
+        return Tree('-', None, a)
+
+
 def par_complementario(l):
     # Esta función determina si una lista de solo literales
     # contiene un par complementario
     # Input: l, una lista de literales
     # Output: True/False
+    for o in range(0, len(l)):
+        if es_literal(l[o]) == True:
+            c = complemento(l[o])
+        for i in range(0, len(l)):
+            if Inorder(c) == Inorder(l[i]):
+                return True
     return False
 
 
@@ -92,7 +105,12 @@ def es_literal(f):
     # Esta función determina si el árbol f es un literal
     # Input: f, una fórmula como árbol
     # Output: True/False
-    return False
+    if f.right is None:
+        return True
+    elif f.right.right is None:
+        return True
+    else:
+        return False
 
 
 def no_literales(l):
@@ -103,12 +121,59 @@ def no_literales(l):
     return False
 
 
-def clasifica_y_extiende(f):
-    # clasifica una fórmula como alfa o beta y extiende listaHojas
-    # de acuerdo a la regla respectiva
+def clasificacion(f):
+    # clasifica una fórmula como alfa o beta
     # Input: f, una fórmula como árbol
+    # Output: string de la clasificación de la formula
+    if f.label == '-':
+        if f.right.label == '-':
+            return '1ALFA'
+        elif f.right.label == '>':
+            return '4ALFA'
+        elif f.right.label == 'O':
+            return '3ALFA'
+        elif f.right.label == 'Y':
+            return '1BETA'
+        else:
+            print("Error en la clasificaión, el conectivo {0} es invalido".format(f.right.label))
+    elif f.label == 'Y':
+        return '2ALFA'
+    elif f.label == 'O':
+        return '2BETA'
+    elif f.label == '>':
+        return "3BETA"
+    else:
+        print("Error en la clasificaión, el conectivo {0} es invalido".format(f.label))
+
+
+def clasifica_y_extiende(f, h):
+    # Extiende listaHojas de acuerdo a la regla respectiva
+    # Input: f, una fórmula como árbol
+    # 		 h, una hoja (lista de fórmulas como árboles)
     # Output: no tiene output, pues modifica la variable global listaHojas
+
     global listaHojas
+
+    print("Formula:", Inorder(f))
+    print("Hoja:", imprime_hoja(h))
+
+    assert (f in h), "La formula no esta en la lista!"
+
+    clase = clasificacion(f)
+    print("Clasificada como:", clase)
+    assert (clase is not None), "Formula incorrecta " + imprime_hoja(h)
+
+    if clase == 'Alfa1':
+        aux = [x for x in h]
+        listaHojas.remove(h)
+        aux.remove(f)
+        aux += [f.right.right]
+        listaHojas.append(aux)
+    elif clase == 'Alfa2':
+        pass
+
+
+# Aqui el resto de casos
 
 
 def Tableaux(f):
@@ -123,3 +188,10 @@ def Tableaux(f):
     listaHojas = [[A]]
 
     return listaInterpsVerdaderas
+
+
+a = Tree('-', None, Tree('>', Tree('-', None, Tree('1', None, None)),
+                         Tree('Y', Tree('-', None, Tree('3', None, None)), Tree('2', None, None))))
+clasificacion(a)
+print(Inorder(Tree('-', None, Tree('>', Tree('-', None, Tree('1', None, None)),
+                                   Tree('Y', Tree('-', None, Tree('3', None, None)), Tree('2', None, None))))))

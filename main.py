@@ -11,6 +11,9 @@ import tableaux as T
 # para obtener uno de sus tableaux
 formula = "pq>-rO"
 
+print(T.Inorder(T.StringtoTree(formula)))
+a = T.Tree('-', None, T.Tree('-', None, T.Tree('p', None, None)))
+T.clasifica_y_extiende(a)
 # Se crea el tableau
 ta = T.Tableaux(formula)
 
