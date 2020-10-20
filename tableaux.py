@@ -240,24 +240,29 @@ def clasifica_y_extiende(f, h):
 
 
 def Tableaux(f):
+
     # Algoritmo de creacion de tableau a partir de lista_hojas
     # Imput: - f, una fórmula como string en notación polaca inversa
     # Output: interpretaciones: lista de listas de literales que hacen
-    # verdadera a f
+    #		 verdadera a f
 
     global listaHojas
     global listaInterpsVerdaderas
 
-    A = StringtoTree(f)
+
+    try:
+        A = StringtoTree(f)
+    except:
+        A = Inorder2Tree(f)
     print(u'La fórmula introducida es:\n', Inorder(A))
 
     listaHojas = [[A]]
 
-    while len(listaHojas) > 0:
+    while (len(listaHojas) > 0):
         h = choice(listaHojas)
         print("Trabajando con hoja:\n", imprime_hoja(h))
         x = no_literales(h)
-        if x is None:
+        if x == None:
             if par_complementario(h):
                 listaHojas.remove(h)
             else:
@@ -267,6 +272,3 @@ def Tableaux(f):
             clasifica_y_extiende(x, h)
 
     return listaInterpsVerdaderas
-
-
-
