@@ -63,6 +63,24 @@ def StringtoTree(A):
     return Pila[-1]
 
 
+def Inorder2Tree(A):
+    if len(A) == 1:
+        return Tree(A[0], None, None)
+    elif A[0] == '-':
+        return Tree(A[0], None, Inorder2Tree(A[1:]))
+    elif A[0] == "(":
+        counter = 0  # Contador de parentesis
+        for i in range(1, len(A)):
+            if A[i] == "(":
+                counter += 1
+            elif A[i] == ")":
+                counter -= 1
+            elif (A[i] in ['Y', 'O', '>', '=']) and (counter == 0):
+                return Tree(A[i], Inorder2Tree(A[1:i]), Inorder2Tree(A[i + 1:-1]))
+    else:
+        return -1
+
+
 ##############################################################################
 # Definición de funciones de tableaux
 ##############################################################################
@@ -77,6 +95,11 @@ def imprime_hoja(H):
             cadena += ", "
         cadena += Inorder(f)
     return cadena + "}"
+
+
+def imprime_listaHojas(L):
+    for h in L:
+        print(imprime_hoja(h))
 
 
 def complemento(a):
@@ -171,50 +194,49 @@ def clasifica_y_extiende(f, h):
     assert (clase is not None), "Formula incorrecta " + imprime_hoja(h)
 
     if clase == '1ALFA':
-        aux = [x for x in h]
+        aux = [x for x in h if x != f]
         listaHojas.remove(h)
-        aux.remove(f)
         aux += [f.right.right]
         listaHojas.append(aux)
     elif clase == '2ALFA':
-        aux = [x for x in h]
+        aux = [x for x in h if x != f]
         listaHojas.remove(h)
-        aux.remove(f)
         aux += [f.left, f.right]
         listaHojas.append(aux)
     elif clase == '3ALFA':
-        aux = [x for x in h]
+        aux = [x for x in h if x != f]
         listaHojas.remove(h)
-        aux.remove(f)
         aux += [Tree('-', None, f.right.left), Tree('-', None, f.right.right)]
         listaHojas.append(aux)
     elif clase == '4ALFA':
-        aux = [x for x in h]
+        aux = [x for x in h if x != f]
         listaHojas.remove(h)
-        aux.remove(f)
-        aux += [f.right.left] + [Tree('-', None, f.right.right)]
+        aux += [f.right.left, Tree('-', None, f.right.right)]
         listaHojas.append(aux)
     elif clase == '1BETA':
-        aux = [x for x in h]
+        aux = [x for x in h if x != f]
+        aux1 = [x for x in h if x != f]
         listaHojas.remove(h)
-        aux.remove(f)
-        aux += [Tree('-', None, f.right.left)] + [Tree('-', None, f.right.right)]
+        aux += [Tree('-', None, f.right.left)]
         listaHojas.append(aux)
+        aux1 += [Tree('-', None, f.right.right)]
+        listaHojas.append(aux1)
     elif clase == '2BETA':
-        aux = [x for x in h]
+        aux = [x for x in h if x != f]
+        aux1 = [x for x in h if x != f]
         listaHojas.remove(h)
-        aux.remove(f)
-        aux += [f.left] + [f.right]
+        aux += [f.left]
         listaHojas.append(aux)
+        aux1 += [f.right]
+        listaHojas.append(aux1)
     elif clase == '3BETA':
-        aux = [x for x in h]
+        aux = [x for x in h if x != f]
+        aux1 = [x for x in h if x != f]
         listaHojas.remove(h)
-        aux.remove(f)
-        aux += [Tree('-', None, f.left)] + [f.right]
+        aux += [Tree('-', None, f.left)]
+        aux1 += [f.right]
         listaHojas.append(aux)
-
-
-# Aqui el resto de casos
+        listaHojas.append(aux1)
 
 
 def Tableaux(f):
@@ -245,3 +267,6 @@ def Tableaux(f):
             clasifica_y_extiende(x, h)
 
     return listaInterpsVerdaderas
+
+
+
