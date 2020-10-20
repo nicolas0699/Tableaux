@@ -186,31 +186,31 @@ def clasifica_y_extiende(f, h):
         aux = [x for x in h]
         listaHojas.remove(h)
         aux.remove(f)
-        aux += [Tree('-', None, f.left), Tree('-', None, f.right)]
+        aux += [Tree('-', None, f.right.left), Tree('-', None, f.right.right)]
         listaHojas.append(aux)
     elif clase == '4ALFA':
         aux = [x for x in h]
         listaHojas.remove(h)
         aux.remove(f)
-        aux += [f.left, Tree('-', None, f.right)]
+        aux += [f.right.left] + [Tree('-', None, f.right.right)]
         listaHojas.append(aux)
     elif clase == '1BETA':
         aux = [x for x in h]
         listaHojas.remove(h)
         aux.remove(f)
-        aux += [[Tree('-', None, f.left)], [Tree('-', None, f.right)]]
+        aux += [Tree('-', None, f.right.left)] + [Tree('-', None, f.right.right)]
         listaHojas.append(aux)
     elif clase == '2BETA':
         aux = [x for x in h]
         listaHojas.remove(h)
         aux.remove(f)
-        aux += [[f.left], [f.right]]
+        aux += [f.left] + [f.right]
         listaHojas.append(aux)
     elif clase == '3BETA':
         aux = [x for x in h]
         listaHojas.remove(h)
         aux.remove(f)
-        aux += [[Tree('-', None, f.left)], [f.right]]
+        aux += [Tree('-', None, f.left)] + [f.right]
         listaHojas.append(aux)
 
 
